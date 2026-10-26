@@ -1,0 +1,33 @@
+# AKDIRO-NEXUS CI — Baran © 2026
+# كل push/PR: تنسيق Go + فحص static + اختبارات كاملة مع عدّاء السباق (race).
+# الأخضر هنا شرط النشر — لا منشور بلا اختبار ناجح.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.24'
+          cache: true
+
+      - name: تنسيق (gofmt) — بلا استثناءات
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "غير منسّق:"; echo "$unformatted"; exit 1
+          fi
+
+      - name: فحص static (go vet)
+        run: go vet ./...
+
+      - name: اختبارات كاملة مع race detector
+        run: go test -race ./...
