@@ -1,0 +1,7 @@
+data/
+*.state.json
+*.scope.json
+findings*.jsonl
+nexusd
+bin/
+.DS_Store

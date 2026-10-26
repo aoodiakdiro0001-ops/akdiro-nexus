@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AKDIRO-NEXUS ⚡ — منسّق الاستخبارات</title>
+<link rel="stylesheet" href="style.css">
+</head><body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">⚡ AKDIRO-NEXUS</div>
+    <div class="brandsub">Profiling · Routing · Scheduling · Radar</div>
+    <div class="sidecard" id="honestyBox">
+      <b>🧿 صراحة كاملة</b>
+      <p>بصمة TLS منفذة، h2/QUIC وكابشا غير منفذة. نسبة النجاح تقاس لكل هدف ولا تُعَد وعدًا. المسح فقط على نطاقات متكفَّع بها.</p>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <b>🔐 نصاب التفويض</b>
+      <input id="scopeDom" dir="ltr" placeholder="example.com">
+      <label><input type="checkbox" id="attest"> <span class="attest-text">أتعهد أنني مخوّل بالتحقق من هذا النطاق وأنه لي أو لدي إذن مكتوب</span></label>
+      <button class="btn primary" onclick="addScope()">أضف بتعهد</button>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h2>🎯 التشخيص الهدف</h2>
+        <div class="rowgap">
+          <input id="probeUrl" dir="ltr" placeholder="https://app.example.com/">
+          <button class="btn" onclick="probe()">شخّص</button>
+        </div>
+        <div id="probeBox" class="muted">انتظار رابط بعد إعادة نطاقها داخل النصاب (وإلا التشخيص مرفوض قانونيًا)</div>
+      </div>
+      <div class="card">
+        <h2>🌐 Co-Capabilities-------------</h2>
+        <div id="capsBox">تحميل…</div>
+        <button class="btn sm" onclick="egress()">افحص IP الخارجي</button>
+        <div id="egressBox" class="muted"></div>
+      </div>
+    </div>
+
+    <div class="card"><h2>🛰️ سجل الثغرات (vulnradar-core)</h2>
+      <table><thead><tr><th>الهدف</th><th>النوع</th><th>الشدّة</th><th>التفصيل</th><th>المصدر</th><th>الوقت</th></tr></thead>
+      <tbody id="findBody"></tbody></table>
+      <div class="muted">اعمل الإضافة عبر POST /api/findings (من vulnradar نفسك)</div>
+    </div>
+
+    <div class="card"><h2>📜 الترخيص</h2><div id="licBox"></div></div>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body></html>
