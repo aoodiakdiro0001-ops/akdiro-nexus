@@ -39,13 +39,32 @@
       </div>
     </div>
 
+    <div class="card"><h2>📊 المراقبة الحية (قياس فعلي — لا وعود)</h2>
+      <div class="cards4">
+        <div class="mini cardstat"><div class="mx">الطلبات</div><b id="mProbes">0</b></div>
+        <div class="mini cardstat"><div class="mx">نجاح</div><b id="mOks">0</b></div>
+        <div class="mini cardstat"><div class="mx">منع</div><b id="mBlocks">0</b></div>
+        <div class="mini cardstat"><div class="mx">تبديلات IP</div><b id="mRot">0</b></div>
+      </div>
+      <div class="muted" style="margin-top:8px">نسبة النجاح <b>المقاسة</b>: <b id="mRate">0%</b> · ثغرات: <b id="mFind">0</b> · عمر: <b id="mUp">0s</b></div>
+      <table><thead><tr><th>المضيف</th><th>نجاح</th><th>منع</th><th>أخطاء</th><th>تبديل</th><th>نسبة</th></tr></thead><tbody id="mHostBody"></tbody></table>
+      <div class="muted">Grafana/Prometheus محليًا: <code dir="ltr">GET /metrics</code> — بلا سحابة.</div>
+    </div>
+
     <div class="card"><h2>🛰️ سجل الثغرات (vulnradar-core)</h2>
       <table><thead><tr><th>الهدف</th><th>النوع</th><th>الشدّة</th><th>التفصيل</th><th>المصدر</th><th>الوقت</th></tr></thead>
       <tbody id="findBody"></tbody></table>
       <div class="muted">اعمل الإضافة عبر POST /api/findings (من vulnradar نفسك)</div>
     </div>
 
-    <div class="card"><h2>📜 الترخيص</h2><div id="licBox"></div></div>
+    <div class="card"><h2>📜 الترخيص</h2>
+      <div id="licBox"></div>
+      <div class="rowgap" style="margin-top:10px">
+        <input id="licKey" dir="ltr" placeholder="NL1.eyJlbWFpbCI6… (مفتاح Pro من المالك)">
+        <button class="btn" onclick="activate()">فعّل</button>
+      </div>
+      <div id="licMsg" class="muted"></div>
+    </div>
   </main>
 </div>
 <div id="toast" class="toast"></div>

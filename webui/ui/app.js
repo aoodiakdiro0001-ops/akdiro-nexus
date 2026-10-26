@@ -81,10 +81,38 @@ async function loadFindings(){
 async function loadLicense(){
   try{
     const l = await api('/api/license');
-    $('#licBox').innerHTML = `<b>${esc(l.product)}</b> — ${esc(l.license)} <span class="pill p3" style="background:#1c3428;color:var(--ok)">مفعّل</span>
-    <div class="muted">المالك: ${esc(l.owner)} · المفتاح: <code dir="ltr">${esc(l.key)}</code> · الدعم: <a class="muted" href="mailto:${esc(l.support.email)}">${esc(l.support.email)}</a> · ${esc(l.support.phone)}</div>`;
+    $('#licBox').innerHTML = `<b>${esc(l.product)}</b> — ${esc(l.tier)} <span class="pill p3" style="background:#1c3428;color:var(--ok)">${l.activated?'مفعّل':'قيد التحقق'}</span>
+    <div class="muted">المالك: ${esc(l.owner)} · الإصدار: ${esc(l.version)} · التوزيع المدفوع يتطلب مفتاحًا؟ ${l.required?'نعم':'لا (نسخة مفتوحة)'}
+    <br>الدعم: <a class="muted" href="mailto:${esc(l.support.email)}">${esc(l.support.email)}</a> · ${esc(l.support.phone)}</div>`;
   }catch{ /* تجاهل */ }
 }
 
-loadScope(); loadCaps(); loadLicense(); loadFindings();
+window.activate = async () => {
+  const key = $('#licKey').value.trim();
+  if(!key){ $('#licMsg').textContent = 'الصق المفتاح أولًا'; return; }
+  try{
+    const r = await api('/api/license/activate',{method:'POST',headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({key})});
+    $('#licMsg').innerHTML = `✅ مفعل لـ <b>${esc(r.owner)}</b> — الفئة: ${esc(r.tier)} (تحقق محلي 100%)`;
+    loadLicense(); loadMetrics();
+  }catch(e){ $('#licMsg').innerHTML = `<span style="color:var(--bad)">${esc(e.message)}</span>`; }
+};
+
+async function loadMetrics(){
+  try{
+    const m = await api('/api/metrics');
+    $('#mProbes').textContent = m.probes; $('#mOks').textContent = m.oks;
+    $('#mBlocks').textContent = m.blocked; $('#mRot').textContent = m.rotations;
+    $('#mFind').textContent = m.findings;
+    $('#mRate').textContent = (m.success_rate*100).toFixed(1)+'%';
+    $('#mUp').textContent = m.uptime_s+'s';
+    $('#mHostBody').innerHTML = (m.per_host||[]).slice(0,12).map(h=>
+      `<tr><td dir="ltr">${esc(h.host)}</td><td>${h.ok}</td><td>${h.block}</td><td>${h.errors||0}</td><td>${h.rotate}</td>
+       <td><span class="pill ${h.success_rate>0.8?'p3':(h.success_rate>0.5?'p4':'p5')}">${(h.success_rate*100).toFixed(0)}%</span></td></tr>`
+    ).join('') || '<tr><td colspan="6" class="muted">لا مضيفين بعد — شغّل تشخيصًا</td></tr>';
+  }catch{ /* تجاهل */ }
+}
+
+loadScope(); loadCaps(); loadLicense(); loadFindings(); loadMetrics();
 setInterval(loadFindings, 5000);
+setInterval(loadMetrics, 2000);

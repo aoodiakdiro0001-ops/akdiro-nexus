@@ -1,7 +1,13 @@
+# ملفات إصدار المفاتيح — سرية المالك مطلقة: لا يُرفع من license-issuer/ شيء إطلاقًا
+license-issuer/
+license-issuer/*.seed
 data/
 *.state.json
 *.scope.json
+*.license.json
+license.activated.json
 findings*.jsonl
 nexusd
+issue-key
 bin/
 .DS_Store

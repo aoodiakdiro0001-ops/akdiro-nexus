@@ -103,6 +103,13 @@ func (g *Governor) Reset() {
 	g.interval = g.base
 }
 
+// BlocksCount عدد المنع المرصود (يدخل في الترقية التلقائية للطبقة).
+func (g *Governor) BlocksCount() int {
+	g.mu.Lock()
+	defer g.mu.Unlock()
+	return g.Blocks
+}
+
 type GovState struct {
 	Host       string        `json:"host"`
 	IntervalMS int64         `json:"interval_ms"`
